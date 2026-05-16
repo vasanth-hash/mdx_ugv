@@ -1,0 +1,92 @@
+name: CI - 4x2 Sensor Fusion Engine
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      # 2. Setup ROS2 Humble
+      - name: Setup ROS2 Humble
+        uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          rosdep update
+          rosdep install --from-paths . --ignore-src -r -y
+
+      # 4. Build with colcon (BLOCKING - fails pipeline on error)
+      - name: Build
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build \
+            --cmake-args -DCMAKE_BUILD_TYPE=Release \
+            --ignore-src
+        shell: bash
+
+      # 5. Run tests (BLOCKING - fails pipeline on error)
+      - name: Run tests
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon test
+          colcon test-result --verbose
+        shell: bash
+
+      # 6. Python lint (NON-BLOCKING - warns only)
+      - name: Lint Python files
+        run: |
+          pip install flake8
+          flake8 . \
+            --count \
+            --max-line-length=100 \
+            --exclude=build,install,log,.git,dai_ws,segimage/models \
+            --format=default
+        continue-on-error: true
+
+      # 7. C++ lint (NON-BLOCKING - warns only)
+      - name: Lint C++ files
+        run: |
+          sudo apt-get install -y cppcheck
+          cppcheck \
+            --enable=all \
+            --suppress=missingIncludeSystem \
+            --suppress=unmatchedSuppression \
+            --inline-suppr \
+            --quiet \
+            $(find . -name "*.cpp" -o -name "*.hpp" \
+              | grep -v build \
+              | grep -v install \
+              | grep -v log \
+              | grep -v dai_ws \
+              | grep -v "segimage/models")
+        continue-on-error: true
+
+      # 8. Check for large files (NON-BLOCKING - warns only)
+      - name: Check for large files
+        run: |
+          echo "Files larger than 50MB:"
+          find . -size +50M -not -path './.git/*' | grep -v build | grep -v install || echo "No large files found"
+        continue-on-error: true
+
+      # 9. Check model files are not accidentally committed (NON-BLOCKING)
+      - name: Check for accidentally committed model weights
+        run: |
+          echo "Checking for large model files (.pt, .onnx, .bin, .weights):"
+          find . \( -name "*.pt" -o -name "*.onnx" -o -name "*.bin" -o -name "*.weights" \) \
+            -not -path './.git/*' | grep -v build || echo "No model weight files found"
+        continue-on-error: true
