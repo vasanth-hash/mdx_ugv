@@ -1,0 +1,105 @@
+dynamic_human_sphere_visualizer:
+  ros__parameters:
+
+    use_sim_time: true
+
+    # ========================================
+    # Detection Parameters
+    # ========================================
+    
+    # Maximum radius to consider points (from robot center)
+    trigger_radius: 8.0              # meters
+    
+    # Vertical height range for human detection
+    human_height_min: 0.3            # meters (filter ground points)
+    human_height_max: 2.2            # meters (filter ceiling/flying objects)
+    
+    # Minimum points required to consider a cluster as valid
+    # Lower values = more sensitive (detects smaller objects)
+    # Higher values = more robust (rejects noise)
+    min_cluster_points: 17           # points
+    
+    # ========================================
+    # Geometry Parameters
+    # ========================================
+    
+    # Safety margin added to detected object radius
+    # Increase for more conservative avoidance
+    inflation_radius: 0.6            # meters
+    
+    # Maximum allowed radius for detected objects
+    # Objects larger than this are rejected (likely walls/terrain)
+    max_human_radius: 0.9            # meters
+    
+    # ========================================
+    # Visualization Parameters
+    # ========================================
+    
+    # Arrow length multiplier for velocity visualization
+    # arrow_length = velocity * velocity_arrow_scale
+    # Increase for longer arrows (easier to see)
+    velocity_arrow_scale: 3.0        # meters per (m/s)
+    
+    # ========================================
+    # Frame Configuration
+    # ========================================
+    
+    # Fixed frame for velocity computation (robot motion compensation)
+    # Common options: "odom", "map"
+    # Must exist in your TF tree!
+    fixed_frame: map                # frame_id
+    
+    # ========================================
+    # Persistence & Filtering
+    # ========================================
+    
+    # How long to keep tracking an obstacle without new detections
+    # Now uses frame counting (3 missed frames = ~0.3 seconds at 10Hz)
+    obstacle_timeout: 0.3            # seconds (for reference only)
+    
+    # Disable point filtering (keeps all lidar points)
+    # Set to true if you want the planner to handle all points
+    disable_point_filtering: false   # boolean
+    
+    # Minimum velocity to display arrow (reduces clutter)
+    min_velocity_display: 0.05       # m/s
+    
+    # ========================================
+    # Multi-Object Tracking
+    # ========================================
+    
+    # Distance threshold for separating different obstacles
+    # Points closer than this are grouped into same obstacle
+    clustering_distance: 1.5         # meters
+    
+    # Maximum distance for matching new detections to existing obstacles
+    # Prevents ID switching between frames
+    association_distance: 2.0        # meters
+    
+    # ========================================
+    # Static vs Dynamic Classification
+    # ========================================
+    
+    # Minimum velocity to be considered dynamic (not static)
+    # Objects slower than this are classified as static
+    min_dynamic_velocity: 0.15       # m/s (about 0.5 km/h)
+    
+    # Time to observe before classifying as static
+    # Wait this long to determine if obstacle is truly static
+    static_observation_time: 2.0     # seconds
+    
+    # ========================================
+    # Advanced Tuning (Optional)
+    # ========================================
+    
+    # Uncomment and adjust these if needed:
+    
+    # Maximum allowed velocity (for outlier rejection)
+    # max_velocity: 2.5              # m/s
+    
+    # Minimum velocity to display arrow (reduces visual clutter)
+    # min_velocity_threshold: 0.05   # m/s
+    
+    # Time window for velocity calculation
+    # min_dt: 0.05                   # seconds
+    # max_dt: 1.0                    # seconds

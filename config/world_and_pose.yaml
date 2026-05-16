@@ -1,0 +1,20 @@
+pose1:
+  world_name: "sonama.sdf"
+  x: -3.42
+  y: 2.64
+  z: 0.47
+  yaw: -0.65
+
+pose2:
+  world_name: "santorini_scaled.sdf"
+  x: 144.1
+  y: -326.5
+  z: 9.286
+  yaw: -2.65
+
+pose3:
+  world_name: "sand_heightmap"
+  x : -29.09
+  y : -97.96
+  z : 0.0
+  yaw : 3.03

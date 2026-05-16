@@ -1,0 +1,4 @@
+source;share/mdx_ugv/local_setup.bash
+source;share/mdx_ugv/local_setup.dsv
+source;share/mdx_ugv/local_setup.sh
+source;share/mdx_ugv/local_setup.zsh

@@ -1,0 +1,10 @@
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/uninstall.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/mdx_ugv_uninstall.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/move_model.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/test.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/edit_cache.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/rebuild_cache.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/list_install_components.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/install.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/install/local.dir
+/home/nvidia/ros2_ws/src/mdx_ugv/build/CMakeFiles/install/strip.dir
